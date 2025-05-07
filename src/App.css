@@ -1,0 +1,56 @@
+.MuiInputBase-input {
+  padding: 16.5px 14px !important;
+}
+
+.css-sghohy-MuiButtonBase-root-MuiButton-root {
+  padding: 6px 16px !important;
+  border-radius: 4px !important;
+  color: #fff !important;
+  background-color: #1976d2 !important;
+}
+
+.css-xsqe0f-MuiButtonBase-root-MuiButton-root {
+  padding: 5px 15px !important;
+  border-radius: 4px !important;
+  border: 1px solid rgba(25, 118, 210, 0.5) !important;
+  width: 100% !important;
+}
+.css-zcbmsk-MuiButtonBase-root-MuiButton-root {
+ 
+  padding: 6px 16px !important;
+  border-radius: 5px !important;
+  color: #fff !important;
+  background-color: #9c27b0 !important;
+}
+.css-pzx7qb-MuiButtonBase-root-MuiButton-root {
+  padding: 6px 16px !important;
+  border-radius: 4px !important;
+  color: #fff !important;
+  background-color: #1976d2 !important;
+}
+
+.image-preview {
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
+  height: 100px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f9f9;
+}
+
+.image-preview img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
