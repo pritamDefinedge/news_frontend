@@ -13,6 +13,13 @@ class _ApiRequest {
   // Method to make POST requests
   postRequest = async ({ url = null, data = null, header = "form" }) => {
     try {
+      console.log('Making POST request to:', url);
+      console.log('Request data:', data);
+      console.log('Request headers:', {
+        "Content-Type": header === "form" ? this.post_header : this.get_header,
+        Authorization: `Bearer ${getAccessToken()}`
+      });
+
       const token = getAccessToken();
       const response = await axios({
         method: "post",
@@ -24,16 +31,26 @@ class _ApiRequest {
         },
         data: data,
       });
+      console.log('Response:', response.data);
       return response.data;
     } catch (e) {
-      const errorHtml = e.response?.data || "";
-      const errorMessageMatch = errorHtml.match(/Error: (.*?)(?:<|$)/);
+      console.error("Error in postRequest:", e);
+      console.error("Error response:", e.response?.data);
+      
+      let errorMessage = "An error occurred";
+      
+      if (e.response?.data) {
+        if (typeof e.response.data === 'string') {
+          const errorMessageMatch = e.response.data.match(/Error: (.*?)(?:<|$)/);
+          errorMessage = errorMessageMatch ? errorMessageMatch[1].trim() : e.response.data;
+        } else if (typeof e.response.data === 'object') {
+          errorMessage = e.response.data.message || e.response.data.error || "An error occurred";
+        }
+      } else if (e.message) {
+        errorMessage = e.message;
+      }
 
-      const errorMessage = errorMessageMatch
-        ? errorMessageMatch[1].trim()
-        : "An error occurred";
-
-      console.error("Error in postRequest:", errorMessage);
+      // console.error("Error message", errorMessage);
       return { success: false, message: errorMessage };
     }
   };
@@ -53,7 +70,10 @@ class _ApiRequest {
 
       return response.data; // Return the response data directly
     } catch (e) {
-      console.error("Error in getRequest:", e); // Improved error logging
+      // Don't log 404 errors for dashboard endpoint
+      if (e.response?.status !== 404 || !url.includes('get_dashboard')) {
+        console.error("Error in getRequest:", e);
+      }
       return { success: false, message: e.message }; // Return a structured error response
     }
   };

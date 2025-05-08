@@ -1,19 +1,21 @@
-import { useNavigate } from "react-router-dom";
-import Layout from "../layouts/Layout";
+import { useNavigate, useLocation } from "react-router-dom";
+import AdminLayout from "../layouts/admin/Layout";
 import { useEffect } from "react";
 
 function PrivateRoute() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
     if (!accessToken && !refreshToken) {
-      navigate("/login");
+      // Save the attempted URL for redirecting after login
+      navigate("/admin/login", { state: { from: location } });
     }
-  }, [navigate]);
+  }, [navigate, location]);
 
-  return <Layout />;
+  return <AdminLayout />;
 }
 
 export default PrivateRoute;
