@@ -54,6 +54,22 @@ export const updateCategoryFailure = (error) => ({
   payload: error
 });
 
+// Update category status (Active / Blocked)
+export const updateCategoryStatus = (id, status) => ({
+  type: CATEGORY.UPDATE_STATUS,
+  payload: { id, status }
+});
+
+export const updateCategoryStatusSuccess = (updatedCategory) => ({
+  type: CATEGORY.UPDATE_STATUS_SUCCESS,
+  payload: updatedCategory
+});
+
+export const updateCategoryStatusFailure = (error) => ({
+  type: CATEGORY.UPDATE_STATUS_FAILURE,
+  payload: error
+});
+
 // Delete category
 export const deleteCategory = (id) => ({
   type: CATEGORY.DELETE,
@@ -79,4 +95,4 @@ export const deleteCategoryFailure = (error) => ({
 export const setLoading = (isLoading) => ({
   type: CATEGORY.SET_LOADING,
   payload: isLoading
-}); 
+});

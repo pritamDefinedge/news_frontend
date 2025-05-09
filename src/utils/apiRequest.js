@@ -58,7 +58,10 @@ class _ApiRequest {
   // Method to make GET requests
   getRequest = async ({ url = null }) => {
     try {
+      console.log('Making GET request to:', url);
       const token = getAccessToken(); // Get access token
+      console.log('Using token:', token ? 'Token exists' : 'No token');
+      
       const response = await axios({
         method: "get",
         url: url,
@@ -68,60 +71,79 @@ class _ApiRequest {
         },
       });
 
+      console.log('GET Response:', response.data);
       return response.data; // Return the response data directly
     } catch (e) {
-      // Don't log 404 errors for dashboard endpoint
-      if (e.response?.status !== 404 || !url.includes('get_dashboard')) {
-        console.error("Error in getRequest:", e);
+      console.error("Error in getRequest:", e);
+      console.error("Error response:", e.response?.data);
+      
+      let errorMessage = "An error occurred";
+      
+      if (e.response?.data) {
+        if (typeof e.response.data === 'string') {
+          errorMessage = e.response.data;
+        } else if (typeof e.response.data === 'object') {
+          errorMessage = e.response.data.message || e.response.data.error || "An error occurred";
+        }
+      } else if (e.message) {
+        errorMessage = e.message;
       }
-      return { success: false, message: e.message }; // Return a structured error response
+
+      return { success: false, message: errorMessage };
     }
   };
 
   // Method to make PUT requests
   putRequest = async ({ url = null, data = null, header = "form" }) => {
+    console.log("Making PUT request to:", url);
+    console.log("Request data:", data);
+    
     try {
-      const token = getAccessToken(); // Get access token
+      const token = getAccessToken();
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      // If data is FormData, don't set Content-Type header
+      // Let the browser set it automatically with the boundary
+      if (!(data instanceof FormData)) {
+        headers["Content-Type"] = header === "form" ? this.post_header : this.get_header;
+      }
+
+      
+      console.log("Request headers:", headers);
+
       const response = await axios({
         method: "put",
         url: url,
-        headers: {
-          "Content-Type":
-            header === "form" ? this.post_header : this.get_header,
-          Authorization: `Bearer ${token}`, // Attach token to the header
-        },
+        headers: headers,
         data: data,
       });
-
+      
+      console.log("PUT Response:", response.data);
       return response.data;
     } catch (e) {
       console.error("Error in putRequest:", e);
-      return { success: false, message: e.message }; // Return a structured error response
+      console.error("Error response:", e.response?.data);
+      
+      let errorMessage = "An error occurred";
+      
+      if (e.response?.data) {
+        if (typeof e.response.data === 'string') {
+          const errorMessageMatch = e.response.data.match(/Error: (.*?)(?:<|$)/);
+          errorMessage = errorMessageMatch ? errorMessageMatch[1].trim() : e.response.data;
+        } else if (typeof e.response.data === 'object') {
+          errorMessage = e.response.data.message || e.response.data.error || "An error occurred";
+        }
+      } else if (e.message) {
+        errorMessage = e.message;
+      }
+
+      return { success: false, message: errorMessage };
     }
   };
 
-  // Method to make PATCH requests
-  patchRequest = async ({ url = null, data = null, header = "form" }) => {
-    try {
-      const token = getAccessToken(); // Get access token
-      const response = await axios({
-        method: "patch",
-        url: url,
-        headers: {
-          "Content-Type":
-            header === "form" ? this.post_header : this.get_header,
-          Authorization: `Bearer ${token}`, // Attach token to the header
-        },
-        data: data,
-      });
-
-      return response.data; // Return the response data directly
-    } catch (e) {
-      console.error("Error in patchRequest:", e); // Improved error logging
-      return { success: false, message: e.message }; // Return a structured error response
-    }
-  };
-
+ 
   // Method to make DELETE requests
   deleteRequest = async ({ url = null, data = null, header = "form" }) => {
     try {

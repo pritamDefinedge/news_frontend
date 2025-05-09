@@ -6,7 +6,7 @@ import rootSaga from './sagas/root.saga';
 import authReducer from './reducers/auth.reducer';
 import dashboardReducer from './reducers/dashboard.reducer';
 import categoryReducer from './reducers/category.reducer';
-import userReducer from './reducers/user.reducer';
+import authorReducer from './reducers/author.reducer'; 
 
 // Create the saga middleware
 const sagaMiddleware = createSagaMiddleware();
@@ -16,7 +16,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   dashboard: dashboardReducer,
   category: categoryReducer,
-  user: userReducer,
+  author: authorReducer 
 });
 
 // Enable Redux DevTools if available

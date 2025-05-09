@@ -5,7 +5,10 @@ const initialState = {
   selectedCategory: null,
   loading: false,
   error: null,
-  success: false
+  success: false,
+  totalCount: 0,
+  currentPage: 1,
+  totalPages: 1
 };
 
 const categoryReducer = (state = initialState, action) => {
@@ -13,7 +16,10 @@ const categoryReducer = (state = initialState, action) => {
     case CATEGORY.SET_ALL:
       return {
         ...state,
-        categories: action.payload,
+        categories: action.payload.categories || [],
+        totalCount: action.payload.totalCount || 0,
+        currentPage: action.payload.currentPage || 1,
+        totalPages: action.payload.totalPages || 1,
         loading: false,
         error: null,
         success: false
@@ -29,6 +35,10 @@ const categoryReducer = (state = initialState, action) => {
       };
 
     case CATEGORY.CREATE:
+    case CATEGORY.UPDATE:
+    case CATEGORY.DELETE:
+    case CATEGORY.DELETE_MANY:
+    case CATEGORY.UPDATE_STATUS:
       return {
         ...state,
         loading: true,
@@ -45,23 +55,8 @@ const categoryReducer = (state = initialState, action) => {
         success: true
       };
 
-    case CATEGORY.CREATE_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-        success: false
-      };
-
-    case CATEGORY.UPDATE:
-      return {
-        ...state,
-        loading: true,
-        success: false,
-        error: null
-      };
-
     case CATEGORY.UPDATE_SUCCESS:
+    case CATEGORY.UPDATE_STATUS_SUCCESS:
       return {
         ...state,
         categories: state.categories.map(category =>
@@ -71,23 +66,6 @@ const categoryReducer = (state = initialState, action) => {
         loading: false,
         error: null,
         success: true
-      };
-
-    case CATEGORY.UPDATE_FAILURE:
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-        success: false
-      };
-
-    case CATEGORY.DELETE:
-    case CATEGORY.DELETE_MANY:
-      return {
-        ...state,
-        loading: true,
-        success: false,
-        error: null
       };
 
     case CATEGORY.DELETE_SUCCESS:
@@ -100,7 +78,10 @@ const categoryReducer = (state = initialState, action) => {
         success: true
       };
 
+    case CATEGORY.CREATE_FAILURE:
+    case CATEGORY.UPDATE_FAILURE:
     case CATEGORY.DELETE_FAILURE:
+    case CATEGORY.UPDATE_STATUS_FAILURE:
       return {
         ...state,
         loading: false,
@@ -108,9 +89,15 @@ const categoryReducer = (state = initialState, action) => {
         success: false
       };
 
+    case CATEGORY.SET_LOADING:
+      return {
+        ...state,
+        loading: action.payload
+      };
+
     default:
       return state;
   }
 };
 
-export default categoryReducer; 
+export default categoryReducer;

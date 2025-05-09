@@ -18,6 +18,7 @@ import PrivateRoute from "./utils/PrivateRoute";
 const Dashboard = lazy(() => import("./pages/admin/dashboard/Dashboard"));
 const Authors = lazy(() => import("./pages/admin/authors/List"));
 const AddAuthor = lazy(() => import("./pages/admin/authors/AddAuthor"));
+const EditAuthor = lazy(() => import("./pages/admin/authors/EditAuthor"));
 const Categories = lazy(() => import("./pages/admin/categories/Categories"));
 const AddCategory = lazy(() => import("./pages/admin/categories/AddCategory"));
 const Login = lazy(() => import("./pages/admin/auth/Login"));
@@ -50,6 +51,7 @@ function App() {
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="authors" element={<Authors />} />
               <Route path="author/add" element={<AddAuthor />} />
+              <Route path="author/edit/:id" element={<EditAuthor />} />
               <Route path="category" element={<Categories />} />
               <Route path="category/add" element={<AddCategory />} />
             </Route>

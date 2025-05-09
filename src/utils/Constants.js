@@ -8,8 +8,8 @@ export const get_dashboard = "admin/get_dashboard";
 // Auth
 export const login_endpoint = "admin/authors/login";
 
-// Category
-export const category = "admin/category";
+// categories
+export const category = "admin/categories";
 
 // Users
-export const users = "admin/authors"; 
+export const authors = "admin/authors"; 
